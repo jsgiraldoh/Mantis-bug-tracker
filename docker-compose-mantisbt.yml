@@ -1,0 +1,31 @@
+version: '3.5'
+
+services:
+  mantisbt:
+    image: mantisbtsw/mantis:lts
+    restart: always
+    container_name: 'mantisbt'
+    ports:
+      - "80:80"
+    links:
+      - mysql
+    volumes:
+      - mantis:/var/www/html/config
+      - mantis_plugins:/var/www/html/plugin
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    container_name: 'mantisbtdb'
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bugtracker
+      - MYSQL_USER=mantisbt
+      - MYSQL_PASSWORD=mantisbt
+    volumes:
+      - mantis_data:/var/lib/mysql
+
+volumes:
+  mantis:
+  mantis_plugins:
+  mantis_data:
